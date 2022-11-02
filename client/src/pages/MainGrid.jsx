@@ -32,9 +32,6 @@ function MainGrid({onSetPage, onSetParams, onSetSortmode}) {
         pagination: {
           pageSize: 5,
           page: page,
-          // sorting: {
-          //   sortModel: [{ field: 'undefined', sort: 'undefined' }],
-          // },
         }
       }}
       columns={[

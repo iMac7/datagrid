@@ -25,9 +25,7 @@ app.get("/data", async (req, res) => {
     let sortmode = req.query.sortmode
     let filterfield = req.query.filterfield
     let filtervalue = req.query.filtervalue
-    
-    console.log(filterfield, filtervalue)
-    
+        
     //NAME FIELD SORT
     if(sortfield==="NAME"){
         let newdata = []
