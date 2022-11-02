@@ -46,6 +46,26 @@ app.get("/data", async (req, res) => {
         })
     }
 
+    // SORT BY NUMBER OF INTERESTS
+    else if(sortfield==="INTERESTS"){
+        let newdata = []
+        if(sortmode==="asc") {
+            newdata = JSON.parse(data).sort((a,b) => (a.INTERESTS.length > b.INTERESTS.length) ? 1
+            : ((b.INTERESTS.length > a.INTERESTS.length) ? -1 : 0))
+        }
+        if(sortmode==="desc") {
+            newdata = JSON.parse(data).sort((a,b) => (a.INTERESTS.length > b.INTERESTS.length) ? -1 
+            : ((b.INTERESTS.length > a.INTERESTS.length) ? 1 : 0))
+        }
+
+        res.send({
+            data: newdata.slice(page*limit, page*limit+limit),
+            total: newdata.length
+        })
+    }
+        
+    
+
     // NAME FIELD FILTER
     else if(filterfield==="NAME"){
         let newdata = []
@@ -59,10 +79,10 @@ app.get("/data", async (req, res) => {
             res.send({
             data: newdata.slice(page*limit, page*limit+limit),
             total: newdata.length
-            })
-    
-        }
+            })    
+        } 
     }
+
 
     //IF NO PARAMETERS TO SORT/FILTER
     else if(sortfield==="undefined"||filterfield==="undefined") {
