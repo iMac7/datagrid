@@ -18,8 +18,6 @@ app.use((req, res, next) => {
 })
 
 
-console.log("initial data",typeof data)
-
 app.get("/data", async (req, res) => {
     let page = Number(req.query.page)
     let limit = Number(req.query.limit)
@@ -33,8 +31,6 @@ app.get("/data", async (req, res) => {
     //NAME FIELD SORT
     if(sortfield==="NAME"){
         let newdata = []
-        console.log("sortfield is name")
-        console.log("original data, top-",data)
         if(sortmode==="asc") {
             newdata = JSON.parse(data).sort((a,b) => (a.NAME > b.NAME) ? 1
             : ((b.NAME > a.NAME) ? -1 : 0))
@@ -54,10 +50,18 @@ app.get("/data", async (req, res) => {
     else if(filterfield==="NAME"){
         let newdata = []
         newdata = JSON.parse(data).filter(item => item.NAME.toUpperCase().includes(filtervalue.toUpperCase()))
-        res.send({
-        data: newdata,
-        total: newdata.length
-        })
+        if(newdata>5){
+            res.send({
+            data: newdata,
+            total: newdata.length
+            })
+        }else{
+            res.send({
+            data: newdata.slice(page*limit, page*limit+limit),
+            total: newdata.length
+            })
+    
+        }
     }
 
     //IF NO PARAMETERS TO SORT/FILTER
