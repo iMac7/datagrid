@@ -1,74 +1,57 @@
 import './App.css';
-import {useEffect, useState} from "react"
+import {useCallback, useEffect, useState} from "react"
+import {Route} from "react-router-dom"
+
 import axios from "axios"
-import { DataGrid } from '@mui/x-data-grid';
-import {Box, Typography} from "@mui/material"
+import {Datacontext} from "./context/Appcontext"
+import MainGrid from './pages/MainGrid';
+import Person from './pages/Person';
+
+
 
 function App() {
 const [data, setdata] = useState([])
 const [total, settotal] = useState(0)
+const [params, setparams] = useState({})
+const [sortmode, setsortmode] = useState({field: "undefined", desc: "undefined"})
+const [filter, setfilter] = useState({field: "undefined", value: "undefined"})
 
 const [page, setpage] = useState(0)
 
   const fetchdata = () => {
-    axios.get(`http://localhost:3001/data?page=${page}&limit=5`,{
-      params:{
-        name:"someparams"
-      }
-    })
+    axios.get(`http://localhost:3001/data?page=${page}&limit=5&sortfield=${sortmode.field}&sortmode=${sortmode.desc}&filterfield=${filter.field}&filtervalue=${filter.value}`)
       .then(res => {
-        console.log(res.data)
+        console.log(res.data.data)
         setdata(res.data.data)
         settotal(res.data.total)
       })
   }
 
   useEffect(() => {
+    console.log(filter)
   fetchdata()
-  }, [page])
+  }, [page, sortmode, filter])
 
   
   return (
-    <div className="App">
-      <Box
-      sx={{
-        height: 400,
-        width: 600
-      }}
-      >
-        <Typography 
-        variant='h4'
-        component="h4"
-        sx={{textAlign:"center", mt:3, mb:3}}
-        >
-          PEOPLE
-        </Typography>
+    <Datacontext.Provider
+      value={{data ,total ,page, sortmode, setsortmode, setfilter }}
+    >
+      <div className="App">
+        <Route exact path={"/"}>
+          <MainGrid 
+          onSetPage = {setpage}
+          onSetParams = {setparams}
+          onSetSortmode = {setsortmode}
+          />
+        </Route>
 
-        <DataGrid
-        autoHeight
-        initialState={{
-          pagination: {
-            pageSize: 5,
-            page: page,
-          }
-        }}
-        columns={[
-          {field: "NAME"},
-          {field: "INTERESTS", width:300}
-        ]}
-        rows={data}
-        rowsPerPageOptions={[5]}
-        pageSize={5}
-        pagination
-        paginationMode='server'
-        rowCount={total}
-        // page={0}
-        onPageChange={(newPage) => setpage(newPage)}
+        <Route exact path={`/person/${params.id}`}
         >
-        </DataGrid> 
-
-      </Box>
-    </div>
+          <Person params={params}/>
+        </Route>
+      </div>
+    </Datacontext.Provider>
   );
 }
 

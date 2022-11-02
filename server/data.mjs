@@ -2,12 +2,12 @@ const data = [
     {
         id: 1,
         NAME: "Joe",
-        INTERESTS: ["skiing", "dancing", "chess"]
+        INTERESTS: ["skiing", "dancing", "chess", "football"]
     },
     {
         id: 2,
         NAME: "Sue",
-        INTERESTS: ["dancing", "swimming", "coding"]
+        INTERESTS: ["dancing"]
     },
     {
         id: 3,
@@ -17,7 +17,7 @@ const data = [
     {
         id: 4,
         NAME: "Will",
-        INTERESTS: ["rugby", "hockey", "tennis"]
+        INTERESTS: ["rugby", "tennis"]
     },
     {
         id: 5,
@@ -27,7 +27,7 @@ const data = [
     {
         id: 6,
         NAME: "Grant",
-        INTERESTS: ["driving", "pets", "coding"]
+        INTERESTS: ["driving", "pets", "coding", "singing", "piano"]
     },
     {
         id: 7,
@@ -42,7 +42,7 @@ const data = [
     {
         id: 9,
         NAME: "Faith",
-        INTERESTS: ["hula hoop", "modelling"]
+        INTERESTS: ["modelling"]
     },
     {
         id: 10,
@@ -51,4 +51,4 @@ const data = [
     },
 ]
 
-module.exports = data
+export default data
