@@ -1,4 +1,4 @@
-import express from "express"
+ import express from "express"
 import data from "./data.mjs"
 
 
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 })
 
 
-// console.log("initial data",data)
+console.log("initial data",typeof data)
 
 app.get("/data", async (req, res) => {
     let page = Number(req.query.page)
@@ -36,16 +36,16 @@ app.get("/data", async (req, res) => {
         console.log("sortfield is name")
         console.log("original data, top-",data)
         if(sortmode==="asc") {
-            newdata = data.sort((a,b) => (a.NAME > b.NAME) ? 1
+            newdata = JSON.parse(data).sort((a,b) => (a.NAME > b.NAME) ? 1
             : ((b.NAME > a.NAME) ? -1 : 0))
         }
         if(sortmode==="desc") {
-            newdata = data.sort((a,b) => (a.NAME > b.NAME) ? -1 
+            newdata = JSON.parse(data).sort((a,b) => (a.NAME > b.NAME) ? -1 
             : ((b.NAME > a.NAME) ? 1 : 0))
         }
 
         res.send({
-            data: [...newdata].slice(page*limit, page*limit+limit),
+            data: newdata.slice(page*limit, page*limit+limit),
             total: newdata.length
         })
     }
@@ -53,14 +53,10 @@ app.get("/data", async (req, res) => {
     // NAME FIELD FILTER
     else if(filterfield==="NAME"){
         let newdata = []
-        if(filtervalue===("undefined"||"")){
-            newdata = data.slice(page*limit, page*limit+limit)
-        }else{
-            newdata = data.filter(item => item.NAME.toUpperCase().includes(filtervalue))
-        }
+        newdata = JSON.parse(data).filter(item => item.NAME.toUpperCase().includes(filtervalue.toUpperCase()))
         res.send({
         data: newdata,
-        total: data.length
+        total: newdata.length
         })
     }
 
@@ -68,7 +64,7 @@ app.get("/data", async (req, res) => {
     else if(sortfield==="undefined"||filterfield==="undefined") {
         let newdata = []
 
-        newdata = data.slice(page*limit, page*limit+limit)
+        newdata = JSON.parse(data).slice(page*limit, page*limit+limit)
 
         res.send({
         data: newdata,

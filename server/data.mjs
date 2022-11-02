@@ -1,4 +1,4 @@
-const data = [
+const unparseddata = [
     {
         id: 1,
         NAME: "Joe",
@@ -50,5 +50,7 @@ const data = [
         INTERESTS: ["sleeping", "driving"]
     },
 ]
+
+const data = JSON.stringify(unparseddata)
 
 export default data
