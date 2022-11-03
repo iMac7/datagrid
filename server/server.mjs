@@ -17,17 +17,44 @@ app.use((req, res, next) => {
     next()
 })
 
+let fakeCredentials = {
+    username: "admin",
+    password: "123"
+}
 
-app.get("/data", async (req, res) => {
+app.get("/login", (req, res) => {
+    const {username, password} = req.body
+    console.log(username, password)
+})
+
+app.get("/data", (req, res) => {
     let page = Number(req.query.page)
     let limit = Number(req.query.limit)
     let sortfield = req.query.sortfield
     let sortmode = req.query.sortmode
     let filterfield = req.query.filterfield
     let filtervalue = req.query.filtervalue
+
+    console.log(sortfield, sortmode)
         
+    if(sortfield==="JOINED"){
+        let newdata = []
+        if(sortmode==="asc") {
+            newdata = JSON.parse(data).sort((a,b)=> new Date(a.JOINED) -new Date(b.JOINED))
+
+        }
+        if(sortmode==="desc") {
+            newdata = JSON.parse(data).sort((a,b)=> new Date(b.JOINED) -new Date(a.JOINED))
+        }
+
+        res.send({
+            data: newdata.slice(page*limit, page*limit+limit),
+            total: newdata.length
+        })
+    }
+    
     //NAME FIELD SORT
-    if(sortfield==="NAME"){
+    else if(sortfield==="NAME"){
         let newdata = []
         if(sortmode==="asc") {
             newdata = JSON.parse(data).sort((a,b) => (a.NAME > b.NAME) ? 1
@@ -90,7 +117,7 @@ app.get("/data", async (req, res) => {
 
         res.send({
         data: newdata,
-        total: data.length
+        total: JSON.parse(data).length
         })
     }
 })

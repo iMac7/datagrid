@@ -1,4 +1,3 @@
-import './App.css';
 import {useCallback, useEffect, useState} from "react"
 import {Route} from "react-router-dom"
 
@@ -6,6 +5,8 @@ import axios from "axios"
 import {Datacontext} from "./context/Appcontext"
 import MainGrid from './pages/MainGrid';
 import Person from './pages/Person';
+import Signup from "./pages/Signup";
+import Signin from "./pages/Signin";
 
 
 
@@ -18,19 +19,18 @@ const [filter, setfilter] = useState({field: "undefined", value: "undefined"})
 
 const [page, setpage] = useState(0)
 
-  const fetchdata = () => {
+  const fetchdata = useCallback(() => {
     axios.get(`http://localhost:3001/data?page=${page}&limit=5&sortfield=${sortmode.field}&sortmode=${sortmode.desc}&filterfield=${filter.field}&filtervalue=${filter.value}`)
       .then(res => {
         console.log(res.data.data)
         setdata(res.data.data)
         settotal(res.data.total)
       })
-  }
+  },[page, sortmode, filter])
 
   useEffect(() => {
-    console.log(filter)
   fetchdata()
-  }, [page, sortmode, filter])
+  }, [fetchdata])
 
   
   return (
@@ -46,10 +46,18 @@ const [page, setpage] = useState(0)
           />
         </Route>
 
-        <Route exact path={`/person/${params.id}`}
-        >
+        <Route exact path={`/person/${params.id}`}>
           <Person params={params}/>
         </Route>
+
+        <Route exact path={`/signup`}>
+          <Signup />
+        </Route>
+
+        <Route exact path={`/signin`}>
+          <Signin />
+        </Route>
+
       </div>
     </Datacontext.Provider>
   );

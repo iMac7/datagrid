@@ -35,8 +35,9 @@ function MainGrid({onSetPage, onSetParams, onSetSortmode}) {
         }
       }}
       columns={[
+        {field: "JOINED", width: 200},
         {field: "NAME"},
-        {field: "INTERESTS", width:300}
+        {field: "INTERESTS", width:300},
       ]}
       rows={data}
       rowsPerPageOptions={[5]}
@@ -53,7 +54,7 @@ function MainGrid({onSetPage, onSetParams, onSetSortmode}) {
 
       sortingMode={"server"}
       onSortModelChange={(sortmodel) => {
-        console.log(sortmodel.length)
+        console.log("sortmodel", sortmodel)
         if(sortmodel.length>0) setsortmode({field:sortmodel[0]?.field, desc:sortmodel[0]?.sort})
         else setsortmode({field:"undefined", desc:"undefined"})
       }}
